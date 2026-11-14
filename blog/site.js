@@ -259,6 +259,9 @@
           }).join("") + '</div><a class="ag-more" href="' + location.origin + "/search/label/" + encodeURIComponent(plat[1]) + '">All ' + esc(plat[0]) + " posts &rarr;</a>");
           var nav2 = $(".ag-nav", endBox);
           endBox.insertBefore(more, nav2 ? nav2.nextSibling : null);
+          // the older "More from Archades Games" box in the post says the same thing now (it stays in the post for
+          // search engines and readers without scripts, and shows on posts with no platform label)
+          $$(".ld-related", body).forEach(function (x) { x.classList.add("ag-hide"); });
         }).catch(function () {});
     }
   }
