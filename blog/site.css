@@ -121,7 +121,7 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
   box-sizing:border-box;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25);}
 /* nothing in the sidebar may be wider than it (no sideways scrollbar) */
 html{overflow-x:clip;}
-.sidebar-container,.sidebar-container .section,#sidebar_item,#sidebar{overflow-x:hidden!important;overflow-y:visible!important;
+.sidebar-container,.sidebar-container .section,#sidebar_item,#sidebar{overflow-x:clip!important;overflow-y:visible!important;
   background:transparent!important;max-width:100%;}
 .sidebar-container .widget *{max-width:100%;box-sizing:border-box;}
 .sidebar-container img,.sidebar-container iframe,.sidebar-container ins,.sidebar-container video{max-width:100%!important;}
@@ -215,6 +215,47 @@ html{overflow-x:clip;}
 
 /* latest videos */
 
+
+/* platform buttons */
+.post-filter-message{background:var(--ag-surface)!important;border:1px solid var(--ag-line)!important;border-radius:12px;color:var(--ag-text)!important;
+  font-family:var(--ag-head)!important;font-style:normal!important;}
+.post-filter-message a{color:var(--ag-aqua)!important;}
+.ag-plat{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;}
+.ag-plat a{padding:7px 16px;border-radius:999px;background:var(--ag-surface);border:1px solid var(--ag-line);font-family:var(--ag-head);
+  font-weight:600;font-size:14.5px;color:var(--ag-text)!important;text-decoration:none!important;letter-spacing:.02em;}
+.ag-plat a:hover{border-color:var(--ag-aqua);color:var(--ag-aqua)!important;}
+.ag-plat a.on{background:var(--ag-aqua);border-color:var(--ag-aqua);color:#071012!important;}
+@media (max-width:800px){.ag-plat{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -4px 14px;padding:0 4px;}
+  .ag-plat::-webkit-scrollbar{display:none;} .ag-plat a{white-space:nowrap;}}
+
+/* reading time, progress bar, contents */
+.ag-read{color:var(--ag-muted);font-family:var(--ag-head);font-size:.95em;}
+.ag-progress{position:fixed;left:0;right:0;top:0;height:3px;z-index:9999;pointer-events:none;}
+.ag-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--ag-teal),var(--ag-aqua));transform:scaleX(0);
+  transform-origin:left;transition:transform .1s linear;}
+.item-view .centered-bottom > aside.sidebar-container.ag-has-toc{align-self:stretch;}
+.ag-toc nav{display:grid;gap:2px;max-height:calc(100vh - 200px);overflow:auto;scrollbar-width:thin;}
+.ag-toc nav a{display:block;padding:6px 10px;border-left:2px solid var(--ag-line);font-family:var(--ag-head);font-size:14px;
+  line-height:1.35;color:var(--ag-muted)!important;text-decoration:none!important;}
+.ag-toc nav a.sub{padding-left:22px;font-size:13px;}
+.ag-toc nav a:hover{color:var(--ag-text)!important;}
+.ag-toc nav a.on{border-left-color:var(--ag-aqua);color:var(--ag-aqua)!important;background:color-mix(in srgb,var(--ag-aqua) 8%,transparent);}
+.sidebar-container .widget.ag-toc{position:sticky;top:84px;}   /* under the theme's sticky top bar */
+.ag-toc-inline{margin:1.2em 0;padding:12px 16px;border:1px solid var(--ag-line);border-radius:12px;background:var(--ag-raised);}
+.ag-toc-inline summary{cursor:pointer;font-family:var(--ag-head);font-weight:700;color:var(--ag-text);}
+.ag-toc-inline nav{margin-top:8px;max-height:none;}
+.post-body h2[id],.post-body h3[id]{scroll-margin-top:84px;}
+html{scroll-behavior:smooth;}
+
+/* more from this platform */
+.ag-platmore{margin-top:18px;}
+.ag-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.ag-cards a{display:block;border-radius:10px;overflow:hidden;background:var(--ag-raised);border:1px solid var(--ag-line);
+  text-decoration:none!important;color:var(--ag-text)!important;font-size:14px;line-height:1.35;}
+.ag-cards a:hover{border-color:var(--ag-aqua);}
+.ag-cards img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:0!important;box-shadow:none!important;cursor:pointer!important;}
+.ag-cards span{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;padding:8px 10px;}
+@media (max-width:640px){.ag-cards{grid-template-columns:1fr;}}
 
 /* labels and footer */
 .post-labels a,.byline.post-labels a{background:var(--ag-raised)!important;color:var(--ag-aqua)!important;border-radius:6px;}
