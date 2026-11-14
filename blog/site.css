@@ -67,6 +67,7 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
 .feed-view #page_body{float:none!important;width:auto!important;}
 .feed-view #Blog1 .blog-posts{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
 .feed-view #Blog1,.feed-view #Blog1 .blog-posts{width:auto!important;max-width:none!important;}
+.feed-view #Blog1 .blog-posts{margin:0!important;}   /* the theme pulls it 15px past the column */
 .feed-view #Blog1 .post-outer-container{width:auto!important;margin:0!important;}
 .feed-view #Blog1 .post-outer-container .post-wrapper,.feed-view #Blog1 .post-outer-container .snippet-thumbnail-container,
 .feed-view #Blog1 .post-outer-container .slide,.feed-view #Blog1 .post-outer-container .post,
