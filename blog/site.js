@@ -55,7 +55,7 @@
       if (a && isDeal(t)) { if (!newest) newest = {t: t, u: a.href}; card.classList.add("ag-hide"); }
     });
     if (newest && home) {
-      var main = $("#Blog1") || $("main");
+      var main = (feat && !feat.classList.contains("ag-hide") && feat.offsetParent) ? feat : ($("#Blog1") || $("main"));
       var bar = el("a", {"class": "ag-deals", href: newest.u},
         '<span class="ag-tag">DEALS</span><span><b>' + esc(newest.t) + "</b><br>This week's sales on games and gear</span>" +
         '<span class="ag-go">See the deals &rarr;</span>');
