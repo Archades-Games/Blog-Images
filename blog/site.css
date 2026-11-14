@@ -32,6 +32,14 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
   letter-spacing:.02em;color:var(--ag-text)!important;padding:8px 14px!important;border-radius:8px;}
 .top-nav a{background:transparent!important;}
 .top-nav a:hover,.top-nav .selected a{background:var(--ag-raised)!important;color:var(--ag-aqua)!important;}
+.item-view .centered-top,.item-view .centered-top-container{background:var(--ag-bg)!important;}
+.item-view .centered-top{align-items:center;gap:18px;}
+.ag-menu{order:2;display:flex;gap:2px;flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;margin-left:8px;}
+.ag-menu::-webkit-scrollbar{display:none;}
+.ag-menu a{white-space:nowrap;font-size:15px;padding:7px 12px!important;text-decoration:none!important;}
+.ag-menu a:hover{background:var(--ag-raised);color:var(--ag-aqua)!important;}
+@media (min-width:801px){.item-view .centered-top .search{flex:0 0 260px!important;width:260px!important;margin-left:auto;}}
+@media (max-width:800px){.item-view .centered-top{flex-wrap:wrap;row-gap:4px;} .ag-menu{order:5;flex-basis:100%;margin:0 0 6px;}}
 .top-nav{background:var(--ag-surface)!important;border:1px solid var(--ag-line);border-radius:12px;padding:4px!important;box-sizing:border-box;max-width:100%;}
 
 /* layout: posts, the theme's ad column and a 300px sidebar side by side (the theme's floats wrap the sidebar under
@@ -66,7 +74,11 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
 .feed-view #Blog1 .post-outer-container .snippet-thumbnail{width:100%!important;}
 .feed-view #Blog1 .post-outer-container .post-wrapper,.feed-view #Blog1 .post-outer-container .slide,
 .FeaturedPost .post-wrapper,.FeaturedPost .slide{background:transparent!important;}
-.feed-view #Blog1 .post-title .snippet-container{max-height:none!important;}
+.feed-view #Blog1 .post-title .snippet-container{max-height:none!important;height:auto!important;overflow:visible!important;}
+.feed-view .post-title .snippet-fade,.FeaturedPost .snippet-fade{display:none!important;}
+.feed-view #Blog1 .post-title a{margin:0!important;padding:0!important;display:block;}
+.feed-view #Blog1 .post-title .r-snippetized{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;height:auto!important;}
+.feed-view #Blog1 .post-outer-container .post-wrapper{margin:0!important;}
 .post-title *{font-family:var(--ag-head)!important;}
 .feed-view #Blog1 .blog-pager{grid-column:1/-1;}
 
