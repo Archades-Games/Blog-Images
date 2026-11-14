@@ -302,6 +302,27 @@ footer,.footer{color:var(--ag-muted);}
 #BlogSearch1 input[name=q]{padding:0 6px!important;font-style:normal!important;}
 #BlogSearch1 .search-submit-container{display:grid!important;place-items:center;width:32px!important;}
 #BlogSearch1 .search-icon{width:22px!important;height:22px!important;padding:0!important;margin:0!important;}
+/* the theme folds the search into an icon on screens under 1545px: on computers there's room, so it stays open;
+   on phones and tablets it's a round icon button that opens the field over the header */
+@media (min-width:1000px){
+  .centered-top .search{width:250px!important;}
+  .centered-top .search .search-expand{display:none!important;}
+  .centered-top .search .section{position:static!important;width:250px!important;}
+}
+@media (max-width:999px){
+  .centered-top .search{width:40px!important;height:40px!important;}
+  .centered-top .search .search-expand{width:40px!important;height:40px!important;border-radius:999px!important;
+    background:var(--ag-surface)!important;border:1px solid var(--ag-line)!important;display:grid!important;place-items:center;}
+  .centered-top .search .search-expand svg{fill:var(--ag-aqua)!important;width:22px;height:22px;margin:0!important;padding:0!important;}
+  .centered-top .search:not(.focused) .section{visibility:hidden!important;}
+  .centered-top .search.focused .section{width:min(250px,calc(100vw - 32px))!important;top:-1px!important;}
+  /* the theme pads its pinned header differently, which made the logo and buttons jump when it pins */
+  .centered-top-container .centered-top,.centered-top-container.sticky .centered-top{padding:10px 0 0!important;}
+  .centered-top-container.sticky{left:0!important;right:0!important;width:auto!important;}
+}
+.centered-top-container.sticky,.centered-top-container.sticky .centered-top{background:var(--ag-bg)!important;}
+@media (max-width:480px){.feed-view #Header1 h1{height:52px!important;width:196px!important;}   /* logo, search and menu on one row */
+  .feed-view .centered-top{padding-top:10px!important;}}
 #BlogSearch1 .search-icon{fill:var(--ag-aqua)!important;}
 
 /* footer */
