@@ -295,7 +295,13 @@ footer,.footer{color:var(--ag-muted);}
 #BlogSearch1 .search-input,#BlogSearch1 .search-submit-container{background:transparent!important;}
 #BlogSearch1 input[name=q]{background:transparent!important;border:0!important;color:var(--ag-text)!important;
   font-family:var(--ag-head)!important;font-size:15px!important;outline:none!important;box-shadow:none!important;}
-#BlogSearch1 input[name=q]::placeholder{color:var(--ag-muted);opacity:1;}
+#BlogSearch1 input[name=q]::placeholder{color:var(--ag-muted);opacity:1;font-style:normal;font-family:var(--ag-head);}
+#search_top,#search_top.section,.centered-top .search{background:transparent!important;box-shadow:none!important;height:auto!important;}
+#BlogSearch1 .search-input,#BlogSearch1 input[name=q],#BlogSearch1 .search-submit-container,#BlogSearch1 .search-icon{height:40px!important;
+  line-height:40px!important;}
+#BlogSearch1 input[name=q]{padding:0 6px!important;font-style:normal!important;}
+#BlogSearch1 .search-submit-container{display:grid!important;place-items:center;width:32px!important;}
+#BlogSearch1 .search-icon{width:22px!important;height:22px!important;padding:0!important;margin:0!important;}
 #BlogSearch1 .search-icon{fill:var(--ag-aqua)!important;}
 
 /* footer */
