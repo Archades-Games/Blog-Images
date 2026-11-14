@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles."};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -103,14 +103,51 @@
     }
   }
 
+  // sidebar: who you are, at the top
+  var side = $(".sidebar-container .section") || $(".sidebar-container");
+  if (side && !$(".ag-about") && CFG.about !== null) {
+    var ic = {
+      yt: "M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6Z",
+      dc: "M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.4 18.4 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.9 12.9 0 0 1-2 1l1.3 2a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.7ZM8 15.4c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.4S9.2 15.4 8 15.4Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z",
+      pt: "M15.4 2.5a7.1 7.1 0 1 0 0 14.2 7.1 7.1 0 0 0 0-14.2ZM1.5 21.5h3.4V2.5H1.5Z",
+      tw: "M2.1 1 .5 5.3v16.2h5.7v3h3.1l3-3h4.6l6.2-6.2V1Zm19 13.2-3.6 3.6h-5.6l-3 3v-3H4.1V3h17Zm-3.6-7.3v6.2h-2.1V6.9Zm-5.6 0v6.2H9.8V6.9Z",
+      fb: "M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v2.9h-1.5c-1.5 0-2 .9-2 1.9V12h3.3l-.5 3.5h-2.8v8.4A12 12 0 0 0 24 12Z"
+    };
+    var soc = [["yt", CFG.youtube, "YouTube"], ["dc", CFG.discord, "Discord"], ["pt", CFG.patreon, "Patreon"], ["tw", CFG.twitch, "Twitch"], ["fb", CFG.facebook, "Facebook"]]
+      .filter(function (x) { return x[1]; }).map(function (x) {
+        return '<a href="' + esc(x[1]) + '" target="_blank" rel="noopener" aria-label="' + x[2] + '" title="' + x[2] + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ic[x[0]] + '"/></svg></a>';
+      }).join("");
+    var about = el("div", {"class": "widget ag-about"},
+      '<img class="ag-star" alt="" src="' + esc(CFG.base) + '/star-192.png"><b>Archades Games</b>' +
+      (CFG.tagline ? "<i>" + esc(CFG.tagline) + "</i>" : "") + (CFG.about ? "<p>" + esc(CFG.about) + "</p>" : "") +
+      '<a class="ag-btn ag-primary" href="' + esc(CFG.subscribe) + '" target="_blank" rel="noopener">Subscribe on YouTube</a>' +
+      '<div class="ag-social">' + soc + "</div>");
+    side.insertBefore(about, side.firstChild);
+  }
+
+  // popular posts: a ranked list with small pictures
+  $$(".PopularPosts").forEach(function (w) {
+    var rows = $$("article, li, .post", $(".widget-content", w) || w).map(function (a) {
+      var link = $(".post-title a, h3 a, a[href]", a), img = $("img", a);
+      if (!link) return null;
+      var src = img ? (img.getAttribute("data-src") || img.src || "") : "";
+      src = src.replace(/=w\d+(-h\d+)?(?:-[a-z]{1,3})*$/, "=w240-h135-p-k-no-nu").replace(/\/s\d+(-c)?\//, "/w240-h135-p-k-no-nu/");
+      return {t: (($(".post-title", a) || link).textContent || "").trim(), u: link.href, i: src};
+    }).filter(function (x, i, arr) { return x && x.t && arr.findIndex(function (y) { return y && y.u === x.u; }) === i; });
+    if (!rows.length) return;
+    $(".widget-content", w).innerHTML = '<div class="ag-rank">' + rows.slice(0, 5).map(function (r) {
+      return '<a href="' + esc(r.u) + '">' + (r.i ? '<img loading="lazy" alt="" src="' + esc(r.i) + '">' : "<img alt=\"\">") + "<span>" + esc(r.t) + "</span></a>";
+    }).join("") + "</div>";
+  });
+
   // sidebar: your newest videos in place of the old (blank) embed
   var vw = $$(".widget.HTML").filter(function (w) { var h = $("h3.title, h2.title", w); return h && /latest youtube/i.test(h.textContent); });
   if (vw.length && window.fetch) {
     fetch(CFG.base + "/videos.json", {cache: "no-cache"}).then(function (r) { return r.json(); }).then(function (list) {
       var h = '<div class="ag-videos">' + list.slice(0, CFG.videos).map(function (v) {
         return '<a href="https://youtu.be/' + esc(v.id) + '" target="_blank" rel="noopener"><img loading="lazy" alt="" src="https://i.ytimg.com/vi/' +
-          esc(v.id) + '/mqdefault.jpg">' + esc(v.title) + "</a>";
-      }).join("") + "</div>";
+          esc(v.id) + '/mqdefault.jpg"><span>' + esc(v.title) + "</span></a>";
+      }).join("") + '</div><a class="ag-more" href="' + esc(CFG.youtube) + '" target="_blank" rel="noopener">All videos on YouTube &rarr;</a>';
       vw.forEach(function (w) { var c = $(".widget-content", w); if (c) c.innerHTML = h; });
     }).catch(function () {});
   }
