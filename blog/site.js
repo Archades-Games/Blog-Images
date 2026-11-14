@@ -31,6 +31,15 @@
       return "<li" + sel + '><a href="' + esc(url) + '"' + (m[2] ? ' target="_blank" rel="noopener"' : "") + ">" + esc(m[0]) + "</a></li>";
     }).join("");
   }
+  // articles: the theme drops the menu there, so it goes in the top bar next to the logo
+  var nameBox = $(".centered-top .blog-name");
+  if (!nav && nameBox && CFG.menu.length && !$(".ag-menu")) {
+    var bar = el("nav", {"class": "ag-menu", "aria-label": "Site menu"}, CFG.menu.map(function (m) {
+      var url = m[1].charAt(0) === "/" ? location.origin + m[1] : m[1];
+      return '<a href="' + esc(url) + '"' + (m[2] ? ' target="_blank" rel="noopener"' : "") + ">" + esc(m[0]) + "</a>";
+    }).join(""));
+    nameBox.parentNode.insertBefore(bar, nameBox.nextSibling);
+  }
 
   // home page: the newest deals post as a slim banner; the rest stay under the Deals label
   if (home && CFG.deals) {
@@ -55,6 +64,56 @@
       main.parentNode.insertBefore(more, main);
     }
   }
+
+  // Blogger shows fewer posts than "posts on main page" when they are long (it caps the page's size), so the list is
+  // topped up from the blog's feed to the number set in Blogger, and the More posts link moves past them
+  (function () {
+    var list = $("#Blog1 .blog-posts"), older = $("#Blog1 .blog-pager a[href*='updated-max']");
+    if (item || !list || !older || /[?&]q=/.test(location.search)) return;
+    var u; try { u = new URL(older.href); } catch (e) { return; }
+    var want = Math.min(parseInt(u.searchParams.get("max-results") || "0", 10) || 0, 50), until = u.searchParams.get("updated-max");
+    var cards = $$("#Blog1 .post-outer-container"), need = want - cards.length;
+    var tpl = cards.filter(function (c) { return !c.classList.contains("ag-hide") && $(".post-title a", c); })[0];
+    if (need <= 0 || !until || !tpl) return;
+    var lab = (location.pathname.match(/^\/search\/label\/([^\/?#]+)/) || [])[1];
+    var seen = {};
+    cards.forEach(function (c) { var a = $(".post-title a", c); if (a) seen[a.href.split("?")[0]] = 1; });
+    var tplUrl = $(".post-title a", tpl).href;
+    var big = function (t) {
+      return String(t || "").replace(/\/s\d+(-[a-z0-9-]+)?\//, "/w720-h405-p-k-no-nu/").replace(/=s\d+(-[a-z0-9-]+)?$/, "=w720-h405-p-k-no-nu")
+        .replace(/\/(default|mqdefault)\.jpg$/, "/hqdefault.jpg");
+    };
+    fetch(location.origin + "/feeds/posts/summary" + (lab ? "/-/" + lab : "") + "?alt=json&orderby=published&max-results=" + (need + 2) +
+          "&published-max=" + encodeURIComponent(until)).then(function (r) { return r.json(); }).then(function (j) {
+      var got = ((j.feed || {}).entry || []).map(function (e) {
+        var l = (e.link || []).filter(function (x) { return x.rel === "alternate"; })[0];
+        return l && {u: l.href, t: (e.title || {}).$t || "", d: (e.published || {}).$t || "", img: big((e.media$thumbnail || {}).url)};
+      }).filter(function (x) { return x && !seen[x.u.split("?")[0]]; });
+      var full = got.length > need;
+      got = got.slice(0, need);
+      if (!got.length) return;
+      var pager = $(".blog-pager", list);
+      got.forEach(function (p) {
+        var c = tpl.cloneNode(true);
+        $$("[id]", c).forEach(function (x) { x.removeAttribute("id"); });
+        $$(".post-share-buttons, .sharing, .byline.post-share-buttons", c).forEach(function (x) { x.remove(); });
+        $$("a", c).forEach(function (a) { if (a.href === tplUrl) a.href = p.u; });
+        var tt = $(".r-snippetized", c) || $(".post-title a", c);
+        tt.textContent = p.t;
+        var th = $(".snippet-thumbnail", c);
+        if (th) th.style.setProperty("background-image", 'url("' + (p.img || CFG.base + "/share.jpg") + '")', "important");
+        var when = new Date(p.d);
+        $$("time", c).forEach(function (x) {
+          x.setAttribute("datetime", p.d);
+          if (!isNaN(when)) x.textContent = when.toLocaleDateString("en-US", {month: "long", day: "numeric", year: "numeric"});
+        });
+        if (home && CFG.deals && p.t.toLowerCase().indexOf(CFG.deals.toLowerCase()) === 0) c.classList.add("ag-hide");
+        list.insertBefore(c, pager && pager.parentNode === list ? pager : null);
+      });
+      if (full) { u.searchParams.set("updated-max", got[got.length - 1].d); older.href = u.toString(); }
+      else if (older.closest(".blog-pager")) older.closest(".blog-pager").classList.add("ag-hide");
+    }).catch(function () {});
+  })();
 
   // screenshots: click to see full size
   document.addEventListener("click", function (e) {
