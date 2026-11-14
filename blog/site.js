@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
