@@ -55,8 +55,6 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
     margin:0!important;}
   .centered-bottom > .dim-overlay{grid-column:1/-1;}
 }
-@media (max-width:999px){.centered-bottom > aside.sidebar-container{width:auto!important;max-width:640px!important;float:none!important;
-  margin-left:auto!important;margin-right:auto!important;}}
 /* leave room at the sides for Google's side-rail ads on big screens, and line the header up with the posts */
 @media (min-width:1440px){.centered-bottom{max-width:min(var(--ag-max),calc(100vw - 360px))!important;}}
 @media (min-width:1000px){.centered-top-container .centered-top{max-width:min(var(--ag-max),calc(100vw - 360px))!important;
@@ -87,6 +85,7 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
 .feed-view .snippet-thumbnail-container,.FeaturedPost .snippet-thumbnail-container{aspect-ratio:16/9;height:auto!important;
   border-radius:12px 12px 0 0;overflow:hidden;position:relative;background:var(--ag-raised)!important;}
 .feed-view .snippet-thumbnail,.FeaturedPost .snippet-thumbnail{position:absolute!important;inset:0;height:100%!important;
+  max-height:none!important;width:100%!important;
   background-size:cover!important;background-position:center!important;}
 .item-view .post-wrapper > .snippet-thumbnail-container{display:none!important;}
 .feed-view #Blog1 .post-outer-container,.FeaturedPost .post{background:var(--ag-surface);border:1px solid var(--ag-line);
@@ -100,16 +99,14 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
 .FeaturedPost article.post{background:transparent!important;border:0!important;overflow:visible!important;width:auto!important;}
 .FeaturedPost .post-wrapper.hero{width:auto!important;max-width:100%!important;height:auto!important;display:grid!important;
   grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);background:var(--ag-surface)!important;border:1px solid var(--ag-line);
-  border-radius:14px;overflow:hidden;margin:0 0 22px!important;transition:border-color .15s;}
+  border-radius:14px;overflow:hidden;margin:0 0 22px!important;transition:border-color .15s;float:none!important;clear:both;}
 .FeaturedPost .post-wrapper.hero:hover{border-color:var(--ag-aqua);}
 .FeaturedPost .post-wrapper.hero .snippet-thumbnail-container{width:auto!important;height:auto!important;aspect-ratio:16/9;
   border-radius:0!important;margin:0!important;}
 .FeaturedPost .post-wrapper.hero .slide{width:auto!important;height:auto!important;display:flex;align-items:center;background:transparent!important;}
 .FeaturedPost .post-wrapper.hero .slide .post{width:auto!important;background:transparent!important;border:0!important;
-  padding:24px 28px!important;margin:0!important;}
-.FeaturedPost .post-wrapper.hero .slide .post::before{content:"Latest";display:inline-block;font-family:var(--ag-head);font-weight:700;
-  font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#071012;background:var(--ag-aqua);border-radius:999px;
-  padding:3px 10px;margin-bottom:12px;}
+  padding:24px 28px!important;margin:0!important;position:relative!important;inset:auto!important;}   /* (phones: not over the picture) */
+.FeaturedPost .post-wrapper.hero .labels-outer-container{display:none!important;}   /* the theme floats it over the title */
 .FeaturedPost .post-wrapper.hero .post-title,.FeaturedPost .post-wrapper.hero .post-title a{font-size:1.75rem!important;line-height:1.25!important;}
 .FeaturedPost .post-title .snippet-container{max-height:none!important;height:auto!important;}
 @media (max-width:800px){.FeaturedPost .post-wrapper.hero{grid-template-columns:1fr;}
@@ -141,8 +138,12 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
   box-sizing:border-box;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25);}
 /* nothing in the sidebar may be wider than it (no sideways scrollbar) */
 html{overflow-x:clip;}
-.sidebar-container,.sidebar-container .section,#sidebar_item,#sidebar{overflow-x:clip!important;overflow-y:visible!important;
-  background:transparent!important;max-width:100%;}
+.sidebar-container .section,#sidebar_item,#sidebar{background:transparent!important;max-width:100%;}
+@media (min-width:1000px){.sidebar-container,.sidebar-container .section,#sidebar_item,#sidebar{overflow-x:clip!important;
+  overflow-y:visible!important;} .sidebar-container{background:transparent!important;}}
+/* phones and tablets: the sidebar is the theme's slide-out panel, which scrolls by itself (not the page behind it) */
+@media (max-width:999px){.sidebar-container{background:var(--ag-bg)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;} .sidebar-container .section{overflow:visible!important;}}
 .sidebar-container .widget *{max-width:100%;box-sizing:border-box;}
 .sidebar-container img,.sidebar-container iframe,.sidebar-container ins,.sidebar-container video{max-width:100%!important;}
 .sidebar-container img{height:auto;}
