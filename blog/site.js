@@ -41,8 +41,9 @@
     nameBox.parentNode.insertBefore(bar, nameBox.nextSibling);
   }
 
-  // home page: the newest deals post as a slim banner; the rest stay under the Deals label
-  if (home && CFG.deals) {
+  // home page: the newest deals post as a slim banner; the rest stay under the Deals label (and off the older pages)
+  var olderPage = !item && /^\/search\/?$/.test(path) && /[?&]updated-max=/.test(location.search) && !/[?&]q=/.test(location.search);
+  if ((home || olderPage) && CFG.deals) {
     var isDeal = function (t) { return t && t.toLowerCase().indexOf(CFG.deals.toLowerCase()) === 0; };
     var newest = null;
     var feat = $("#FeaturedPost1");
@@ -53,7 +54,7 @@
       var t = a && (a.textContent.trim() || ($(".post-title", card) || {}).textContent || "").trim();
       if (a && isDeal(t)) { if (!newest) newest = {t: t, u: a.href}; card.classList.add("ag-hide"); }
     });
-    if (newest) {
+    if (newest && home) {
       var main = $("#Blog1") || $("main");
       var bar = el("a", {"class": "ag-deals", href: newest.u},
         '<span class="ag-tag">DEALS</span><span><b>' + esc(newest.t) + "</b><br>This week's sales on games and gear</span>" +
@@ -107,10 +108,14 @@
           x.setAttribute("datetime", p.d);
           if (!isNaN(when)) x.textContent = when.toLocaleDateString("en-US", {month: "long", day: "numeric", year: "numeric"});
         });
-        if (home && CFG.deals && p.t.toLowerCase().indexOf(CFG.deals.toLowerCase()) === 0) c.classList.add("ag-hide");
+        if ((home || olderPage) && CFG.deals && p.t.toLowerCase().indexOf(CFG.deals.toLowerCase()) === 0) c.classList.add("ag-hide");
         list.insertBefore(c, pager && pager.parentNode === list ? pager : null);
       });
-      if (full) { u.searchParams.set("updated-max", got[got.length - 1].d); older.href = u.toString(); }
+      if (full) {                                   // Blogger ignores a date with milliseconds and starts over at the newest
+        var last = got[got.length - 1].d.replace(/\.\d+(?=([+-]\d\d:?\d\d|Z)$)/, "");
+        older.href = location.origin + "/search" + (lab ? "/label/" + lab : "") + "?updated-max=" + encodeURIComponent(last) +
+          "&max-results=" + want;
+      }
       else if (older.closest(".blog-pager")) older.closest(".blog-pager").classList.add("ag-hide");
     }).catch(function () {});
   })();
