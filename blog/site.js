@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles."};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]]};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -159,6 +159,102 @@
         if (p[1]) h += '<a class="ag-next" href="' + esc(p[1].u) + '"><small>Next &rarr;</small>' + esc(p[1].t) + "</a>";
         $(".ag-nav", box).innerHTML = h;
       });
+    }
+  }
+
+  // platform buttons above the posts on the home and label pages
+  var plats = (CFG.platforms || []).filter(function (x) { return x[0] && x[1]; });
+  var curLab = decodeURIComponent((location.pathname.match(/^\/search\/label\/([^\/?#]+)/) || [])[1] || "").replace(/\+/g, " ");
+  var mainBox = $("main#main") || $("main");
+  if (!item && plats.length && mainBox && !$(".ag-plat") && !/[?&]q=/.test(location.search)) {
+    var row = el("nav", {"class": "ag-plat ag-ui", "aria-label": "Platforms"},
+      '<a href="' + location.origin + '/"' + (home ? ' class="on"' : "") + ">All</a>" + plats.map(function (x) {
+        var on = curLab.toLowerCase() === x[1].toLowerCase() ? ' class="on"' : "";
+        return '<a href="' + location.origin + "/search/label/" + encodeURIComponent(x[1]) + '"' + on + ">" + esc(x[0]) + "</a>";
+      }).join(""));
+    mainBox.insertBefore(row, mainBox.firstChild);
+  }
+
+  if (body) {
+    var words = (body.innerText || body.textContent || "").split(/\s+/).filter(Boolean).length;
+    // reading time next to the date
+    var pub = $(".post-header time.published, .post-header time, time.published");
+    if (pub && words > 150 && !$(".ag-read")) {
+      var rt = el("span", {"class": "ag-read"}, " &middot; " + Math.max(1, Math.round(words / 230)) + " min read");
+      pub.parentNode.insertBefore(rt, pub.nextSibling);
+    }
+    // a thin bar at the top that fills as you read
+    if (words > 300 && !$(".ag-progress")) {
+      var pb = el("div", {"class": "ag-progress", "aria-hidden": "true"}, "<i></i>");
+      document.body.appendChild(pb);
+      var fill = function () {
+        var r = body.getBoundingClientRect(), span = r.height - innerHeight * 0.6;
+        var f = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 1;
+        pb.firstChild.style.transform = "scaleX(" + f + ")";
+      };
+      addEventListener("scroll", fill, {passive: true}); addEventListener("resize", fill); fill();
+    }
+    // contents: the article's sections, beside it on big screens (follows you down) and folded at the top on phones
+    var skip = ".ld-gear,.ld-related,.ld-series,.ld-qs,.ld-box,.ag-end,table";
+    var hs = $$("h2", body).filter(function (h) { return !h.closest(skip); });
+    if (hs.length < 3) hs = $$("h2, h3", body).filter(function (h) { return !h.closest(skip); });
+    hs = hs.filter(function (h) { return (h.textContent || "").trim(); });
+    if (hs.length >= 3 && words > 600 && !$(".ag-toc")) {
+      var used = {};
+      var links = hs.map(function (h) {
+        if (!h.id) {
+          var base = "s-" + (h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "part");
+          var id = base, n = 2;
+          while (used[id] || document.getElementById(id)) id = base + "-" + n++;
+          h.id = id;
+        }
+        used[h.id] = 1;
+        return '<a href="#' + h.id + '"' + (h.tagName === "H3" ? ' class="sub"' : "") + ">" + esc(h.textContent.trim().slice(0, 80)) + "</a>";
+      }).join("");
+      var aside = $("aside.sidebar-container");
+      var wide = matchMedia("(min-width:1000px)").matches;
+      var toc;
+      if (wide && aside) {
+        toc = el("div", {"class": "widget ag-toc"}, '<h3 class="title">In this article</h3><nav>' + links + "</nav>");
+        aside.appendChild(toc);
+        aside.classList.add("ag-has-toc");
+      } else {
+        toc = el("details", {"class": "ag-toc ag-toc-inline"}, "<summary>In this article</summary><nav>" + links + "</nav>");
+        body.insertBefore(toc, hs[0]);
+      }
+      if (window.IntersectionObserver) {
+        var seen = {};
+        var mark = function () {
+          var cur = null;
+          hs.forEach(function (h) { if (h.getBoundingClientRect().top < innerHeight * 0.3) cur = h.id; });
+          $$("a", toc).forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === "#" + cur); });
+        };
+        var io = new IntersectionObserver(mark, {rootMargin: "0px 0px -60% 0px"});
+        hs.forEach(function (h) { io.observe(h); });
+        addEventListener("scroll", function () { if (!seen.t) { seen.t = setTimeout(function () { seen.t = 0; mark(); }, 120); } }, {passive: true});
+      }
+    }
+    // more from this post's platform, in the end box
+    var endBox = $(".ag-end");
+    var labs = $$(".post-labels a, .byline.post-labels a, a[rel=tag]").map(function (a) { return (a.textContent || "").trim().toLowerCase(); });
+    var plat = plats.filter(function (x) { return labs.indexOf(x[1].toLowerCase()) >= 0; })[0];
+    if (endBox && plat && window.fetch && !$(".ag-platmore")) {
+      var me2 = location.href.split(/[?#]/)[0];
+      fetch(location.origin + "/feeds/posts/summary/-/" + encodeURIComponent(plat[1]) + "?alt=json&max-results=6")
+        .then(function (r) { return r.json(); }).then(function (j) {
+          var list = ((j.feed || {}).entry || []).map(function (e) {
+            var l = (e.link || []).filter(function (x) { return x.rel === "alternate"; })[0];
+            var img = String((e.media$thumbnail || {}).url || "").replace(/\/s\d+(-[a-z0-9-]+)?\//, "/w480-h270-p-k-no-nu/")
+              .replace(/=s\d+(-[a-z0-9-]+)?$/, "=w480-h270-p-k-no-nu").replace(/\/(default|mqdefault)\.jpg$/, "/hqdefault.jpg");
+            return l && {u: l.href, t: (e.title || {}).$t || "", img: img};
+          }).filter(function (x) { return x && x.u.split("?")[0] !== me2; }).slice(0, 3);
+          if (!list.length) return;
+          var more = el("div", {"class": "ag-platmore"}, "<h3>More " + esc(plat[0]) + "</h3><div class=\"ag-cards\">" + list.map(function (x) {
+            return '<a href="' + esc(x.u) + '"><img loading="lazy" alt="" src="' + esc(x.img || CFG.base + "/share.jpg") + '"><span>' + esc(x.t) + "</span></a>";
+          }).join("") + '</div><a class="ag-more" href="' + location.origin + "/search/label/" + encodeURIComponent(plat[1]) + '">All ' + esc(plat[0]) + " posts &rarr;</a>");
+          var nav2 = $(".ag-nav", endBox);
+          endBox.insertBefore(more, nav2 ? nav2.nextSibling : null);
+        }).catch(function () {});
     }
   }
 
