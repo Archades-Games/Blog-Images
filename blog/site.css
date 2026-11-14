@@ -95,6 +95,25 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
   margin:0!important;}
 .feed-view #Blog1 .post-outer-container .post-outer{padding:0!important;}
 
+/* the newest post (the theme's big "featured" spot): one card, picture left and title right */
+.FeaturedPost article.post{background:transparent!important;border:0!important;overflow:visible!important;width:auto!important;}
+.FeaturedPost .post-wrapper.hero{width:auto!important;max-width:100%!important;height:auto!important;display:grid!important;
+  grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);background:var(--ag-surface)!important;border:1px solid var(--ag-line);
+  border-radius:14px;overflow:hidden;margin:0 0 22px!important;transition:border-color .15s;}
+.FeaturedPost .post-wrapper.hero:hover{border-color:var(--ag-aqua);}
+.FeaturedPost .post-wrapper.hero .snippet-thumbnail-container{width:auto!important;height:auto!important;aspect-ratio:16/9;
+  border-radius:0!important;margin:0!important;}
+.FeaturedPost .post-wrapper.hero .slide{width:auto!important;height:auto!important;display:flex;align-items:center;background:transparent!important;}
+.FeaturedPost .post-wrapper.hero .slide .post{width:auto!important;background:transparent!important;border:0!important;
+  padding:24px 28px!important;margin:0!important;}
+.FeaturedPost .post-wrapper.hero .slide .post::before{content:"Latest";display:inline-block;font-family:var(--ag-head);font-weight:700;
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#071012;background:var(--ag-aqua);border-radius:999px;
+  padding:3px 10px;margin-bottom:12px;}
+.FeaturedPost .post-wrapper.hero .post-title,.FeaturedPost .post-wrapper.hero .post-title a{font-size:1.75rem!important;line-height:1.25!important;}
+.FeaturedPost .post-title .snippet-container{max-height:none!important;height:auto!important;}
+@media (max-width:800px){.FeaturedPost .post-wrapper.hero{grid-template-columns:1fr;}
+  .FeaturedPost .post-wrapper.hero .post-title,.FeaturedPost .post-wrapper.hero .post-title a{font-size:1.35rem!important;}}
+
 /* article: a short banner from the post's picture, the article card overlapping its bottom edge */
 .item-view .bg-photo-container{height:300px!important;position:relative;overflow:hidden;}
 .item-view .bg-photo{height:100%!important;}
