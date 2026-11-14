@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]]};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":""};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -268,8 +268,7 @@
 
   // sidebar: who you are, at the top
   var side = $(".sidebar-container .section") || $(".sidebar-container");
-  if (side && !$(".ag-about") && CFG.about !== null) {
-    var ic = {
+  var ic = {
       yt: "M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.3 3.6Z",
       dc: "M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.4 18.4 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.9 12.9 0 0 1-2 1l1.3 2a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.7ZM8 15.4c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.4S9.2 15.4 8 15.4Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z",
       pt: "M15.4 2.5a7.1 7.1 0 1 0 0 14.2 7.1 7.1 0 0 0 0-14.2ZM1.5 21.5h3.4V2.5H1.5Z",
@@ -280,12 +279,37 @@
       .filter(function (x) { return x[1]; }).map(function (x) {
         return '<a href="' + esc(x[1]) + '" target="_blank" rel="noopener" aria-label="' + x[2] + '" title="' + x[2] + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ic[x[0]] + '"/></svg></a>';
       }).join("");
+  if (side && !$(".ag-about") && CFG.about !== null) {
     var about = el("div", {"class": "widget ag-about"},
       '<img class="ag-star" alt="" src="' + esc(CFG.base) + '/star-192.png"><b>Archades Games</b>' +
       (CFG.tagline ? "<i>" + esc(CFG.tagline) + "</i>" : "") + (CFG.about ? "<p>" + esc(CFG.about) + "</p>" : "") +
       '<a class="ag-btn ag-primary" href="' + esc(CFG.subscribe) + '" target="_blank" rel="noopener">Subscribe on YouTube</a>' +
-      '<div class="ag-social">' + soc + "</div>");
+      '<div class="ag-social">' + soc + "</div>" +
+      (CFG.start ? '<a class="ag-more ag-newhere" href="' + esc(CFG.start) + '">New here? Start here &rarr;</a>' : ""));
     side.insertBefore(about, side.firstChild);
+  }
+
+  // footer: who you are, the menu, the platforms, your channels, the policy pages and the affiliate notice
+  var foot = $("footer.footer") || $("footer");
+  if (foot && !$(".ag-footer")) {
+    var abs = function (u) { return u.charAt(0) === "/" ? location.origin + u : u; };
+    var lk = function (l, u, ext) {
+      var out = ext || (/^https?:/.test(u) && u.indexOf(location.host) < 0);
+      return '<a href="' + esc(abs(u)) + '"' + (out ? ' target="_blank" rel="noopener"' : "") + ">" + esc(l) + "</a>";
+    };
+    var col = function (t, items) { return items.length ? '<nav class="ag-fcol" aria-label="' + esc(t) + '"><h4>' + esc(t) + "</h4>" + items.join("") + "</nav>" : ""; };
+    var aboutLinks = (CFG.start ? [lk("Start here", CFG.start)] : []).concat((CFG.footerLinks || []).map(function (x) { return lk(x[0], x[1]); }));
+    var fdiv = el("div", {"class": "ag-footer ag-ui"},
+      '<div class="ag-fbrand"><img alt="" src="' + esc(CFG.base) + '/star-192.png"><div><b>Archades Games</b>' +
+      (CFG.tagline ? "<i>" + esc(CFG.tagline) + "</i>" : "") + "</div>" + (CFG.about ? "<p>" + esc(CFG.about) + "</p>" : "") +
+      '<div class="ag-social">' + soc + "</div></div>" +
+      col("Explore", CFG.menu.map(function (m) { return lk(m[0], m[1], m[2]); })) +
+      col("Platforms", plats.map(function (x) { return lk(x[0], "/search/label/" + encodeURIComponent(x[1])); })) +
+      col("About", aboutLinks) +
+      '<div class="ag-flegal">' + (CFG.footerNote ? "<p>" + esc(CFG.footerNote) + "</p>" : "") +
+      "<p>&copy; " + new Date().getFullYear() + " Archades Games &middot; Powered by Blogger</p></div>");
+    foot.insertBefore(fdiv, foot.firstChild);
+    document.body.classList.add("ag-has-footer");
   }
 
   // popular posts: a ranked list with small pictures
