@@ -143,9 +143,13 @@ html{overflow-x:clip;}
 .sidebar-container .section,#sidebar_item,#sidebar{background:transparent!important;max-width:100%;}
 @media (min-width:1000px){.sidebar-container,.sidebar-container .section,#sidebar_item,#sidebar{overflow-x:clip!important;
   overflow-y:visible!important;} .sidebar-container{background:transparent!important;}}
-/* phones and tablets: the sidebar is the theme's slide-out panel, which scrolls by itself (not the page behind it) */
-@media (max-width:999px){.sidebar-container{background:var(--ag-bg)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;} .sidebar-container .section{overflow:visible!important;}}
+/* phones and tablets: on the home and list pages the sidebar is the theme's slide-out panel, which scrolls by
+   itself (not the page behind it). In an article it sits in the page under the post, so it must NOT be a scroll
+   box there: a finger on it would stop the page from scrolling. */
+@media (max-width:999px){.sidebar-container{background:var(--ag-bg)!important;overflow-x:hidden!important;}
+  body:not(.item-view) .sidebar-container{overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
+  body.item-view .sidebar-container{overflow:visible!important;overscroll-behavior:auto!important;}
+  .sidebar-container .section{overflow:visible!important;}}
 .sidebar-container .widget *{max-width:100%;box-sizing:border-box;}
 .sidebar-container img,.sidebar-container iframe,.sidebar-container ins,.sidebar-container video{max-width:100%!important;}
 .sidebar-container img{height:auto;}
@@ -243,6 +247,8 @@ html{overflow-x:clip;}
 .ag-deals .ag-tag{background:var(--ag-purple);color:#fff;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:.06em;}
 .ag-deals .ag-go{margin-left:auto;color:var(--ag-purple);font-weight:700;white-space:nowrap;}
 .ag-deals .ag-tag{white-space:nowrap;}
+.ag-deals.ag-sale{border-color:#f5b83d!important;box-shadow:0 0 0 1px rgba(245,184,61,.35),0 8px 28px rgba(245,184,61,.12);}
+.ag-deals.ag-sale .ag-tag{background:#f5b83d;color:#16120a;} .ag-deals.ag-sale .ag-go{color:#f5b83d;}
 .ag-hide{display:none!important;}
 
 /* phones: the menu scrolls sideways instead of hiding items */
