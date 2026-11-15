@@ -292,7 +292,7 @@
   // a slim bar pinned to the top once you've scrolled past the header (the theme's own only shows when you scroll back
   // up): logo, the menu and search on computers; logo, search and the menu button on phones
   var hdr = $(".centered-top-container");
-  if (hdr && !$(".ag-pin")) {
+  if (hdr && !$(".ag-pin") && !document.body.classList.contains("item-view")) {
     var sicon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 9.5 16a6.5 6.5 0 0 0 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5Zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14Z"/></svg>';
     var pin = el("div", {"class": "ag-pin ag-ui"},
       '<div class="ag-pin-in"><a class="ag-pin-logo" href="' + location.origin + '/" aria-label="Archades Games home">Archades Games</a>' +
