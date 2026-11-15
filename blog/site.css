@@ -330,8 +330,10 @@ footer,.footer{color:var(--ag-muted);}
   .centered-top-container.sticky{left:0!important;right:0!important;width:auto!important;}
 }
 .centered-top-container.sticky,.centered-top-container.sticky .centered-top{background:var(--ag-bg)!important;}
-/* the pinned bar: Link Desk's own (the theme's pop-up-on-scroll-up copy is hidden) */
-.centered-top-container.sticky{visibility:hidden!important;pointer-events:none!important;}
+/* the pinned bar on the home, label and search pages: Link Desk's own (the theme's pop-up-on-scroll-up copy is
+   hidden there). Articles keep the theme's top bar, which is always pinned and already carries the menu. */
+body:not(.item-view) .centered-top-container.sticky{visibility:hidden!important;pointer-events:none!important;}
+body.sidebar-visible .ag-pin{transform:translateY(-110%)!important;}   /* the open drawer's close button stays reachable */
 .ag-pin{position:fixed;left:0;right:0;top:0;z-index:1000;background:color-mix(in srgb,var(--ag-bg) 94%,transparent);
   -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--ag-line);
   transform:translateY(-110%);transition:transform .18s ease;box-shadow:0 6px 24px rgba(0,0,0,.35);}
