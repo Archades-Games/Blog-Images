@@ -24,6 +24,8 @@ h1,h2,h3,h4,.post-title,.title,.widget h3,.byline,.top-nav,.blog-pager,.ag-ui,
 @media (min-resolution:1.5dppx){#Header1 h1{background-image:url("https://archades-games.github.io/Blog-Images/blog/logo@2x.png");}}
 .item-view #Header1 h1{height:52px;width:200px;}
 @media (max-width:800px){#Header1 h1{height:64px;width:240px;}}
+.ag-pin-logo{font-size:0!important;background:url("https://archades-games.github.io/Blog-Images/blog/logo.png") left center/contain no-repeat;}
+@media (min-resolution:1.5dppx){.ag-pin-logo{background-image:url("https://archades-games.github.io/Blog-Images/blog/logo@2x.png");}}
 
 /* menu */
 .top-nav,.top-nav .PageList{background:transparent!important;}
@@ -223,10 +225,17 @@ html{overflow-x:clip;}
 /* phones: the menu scrolls sideways instead of hiding items */
 @media (max-width:800px){
   .top-nav .overflowable-container,.top-nav .overflowable-contents{height:auto!important;overflow:visible!important;}
-  .top-nav ul{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-  .top-nav ul::-webkit-scrollbar{display:none;}
+  .top-nav ul{flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;height:auto!important;gap:0!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent);}
+  .top-nav ul::-webkit-scrollbar,.top-nav .PageList::-webkit-scrollbar{display:none;}
+  .top-nav .PageList,.top-nav .widget-content{overflow:hidden!important;}
   .top-nav .overflow-button{display:none!important;}
-  .top-nav a{padding:7px 11px!important;font-size:15px;white-space:nowrap;}
+  .top-nav li{flex:0 0 auto;height:auto!important;padding:0!important;margin:0!important;line-height:1.2!important;}
+  .top-nav a{padding:8px 10px!important;font-size:15px!important;line-height:1.2!important;white-space:nowrap;display:block;}
+  .feed-view .centered-top .top-nav{margin-top:8px!important;padding:3px!important;border-radius:10px!important;}
+  .ag-plat{gap:6px!important;margin-bottom:12px!important;}
+  .ag-plat a{padding:6px 12px!important;font-size:13.5px!important;}
   .ag-deals{flex-wrap:wrap;gap:8px 12px;}
   .ag-deals .ag-go{margin-left:0;}
   body,.post-body{font-size:17px;}
@@ -321,6 +330,46 @@ footer,.footer{color:var(--ag-muted);}
   .centered-top-container.sticky{left:0!important;right:0!important;width:auto!important;}
 }
 .centered-top-container.sticky,.centered-top-container.sticky .centered-top{background:var(--ag-bg)!important;}
+/* the pinned bar: Link Desk's own (the theme's pop-up-on-scroll-up copy is hidden) */
+.centered-top-container.sticky{visibility:hidden!important;pointer-events:none!important;}
+.ag-pin{position:fixed;left:0;right:0;top:0;z-index:1000;background:color-mix(in srgb,var(--ag-bg) 94%,transparent);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--ag-line);
+  transform:translateY(-110%);transition:transform .18s ease;box-shadow:0 6px 24px rgba(0,0,0,.35);}
+.ag-pin.on{transform:none;}
+.ag-pin::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;
+  background:linear-gradient(90deg,var(--ag-teal),var(--ag-red) 50%,var(--ag-teal));opacity:.8;}
+.ag-pin-in{max-width:calc(100vw - 32px);margin:0 auto;display:flex;align-items:center;gap:14px;height:58px;padding:0 12px;
+  box-sizing:border-box;position:relative;}
+@media (min-width:1000px){.ag-pin-in{padding:0 28px;max-width:none;}}
+@media (min-width:1440px){.ag-pin-in{max-width:min(var(--ag-max),calc(100vw - 360px));}}
+.ag-pin-logo{flex:0 0 auto;width:170px;height:44px;display:flex;align-items:center;font-family:var(--ag-head);font-weight:700;
+  font-size:18px;color:var(--ag-aqua)!important;text-decoration:none!important;white-space:nowrap;overflow:hidden;}
+.ag-pin-menu{flex:1 1 auto;min-width:0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;}
+.ag-pin-menu::-webkit-scrollbar{display:none;}
+.ag-pin-menu a{white-space:nowrap;font-family:var(--ag-head);font-weight:600;font-size:15px;padding:7px 12px;border-radius:8px;
+  color:var(--ag-text)!important;text-decoration:none!important;}
+.ag-pin-menu a:hover{background:var(--ag-raised);color:var(--ag-aqua)!important;}
+.ag-pin-search{flex:0 0 220px;display:flex;align-items:center;height:38px;margin:0;background:var(--ag-surface);
+  border:1px solid var(--ag-line);border-radius:999px;padding:0 4px 0 14px;box-sizing:border-box;}
+.ag-pin-search:focus-within{border-color:var(--ag-aqua);}
+.ag-pin-search input{flex:1;min-width:0;background:transparent;border:0;outline:none;color:var(--ag-text);font-family:var(--ag-head);
+  font-size:15px;}
+.ag-pin-search input::placeholder{color:var(--ag-muted);}
+.ag-pin-search button,.ag-pin-ham{background:transparent;border:0;padding:0;width:32px;height:32px;display:grid;place-items:center;
+  cursor:pointer;}
+.ag-pin-search svg,.ag-pin-ham svg{width:22px;height:22px;fill:var(--ag-aqua);}
+.ag-pin-ham{display:none;}
+@media (max-width:999px){
+  .ag-pin-in{height:52px;gap:8px;max-width:none;}
+  .ag-pin-logo{flex:1 1 auto;width:auto;max-width:180px;height:38px;}
+  .ag-pin-menu{display:none;}
+  .ag-pin-search{flex:0 0 38px;width:38px;padding:0;justify-content:center;margin-left:auto;}
+  .ag-pin-search input{display:none;}
+  .ag-pin.searching .ag-pin-logo{display:none;}
+  .ag-pin-search.open{flex:1 1 auto;width:auto;padding:0 4px 0 14px;margin-left:0;}
+  .ag-pin-search.open input{display:block;}
+  .ag-pin-ham{display:grid;width:38px;height:38px;border-radius:999px;border:1px solid var(--ag-line);background:var(--ag-surface);}
+}
 @media (max-width:480px){.feed-view #Header1 h1{height:52px!important;width:196px!important;}   /* logo, search and menu on one row */
   .feed-view .centered-top{padding-top:10px!important;}}
 #BlogSearch1 .search-icon{fill:var(--ag-aqua)!important;}
