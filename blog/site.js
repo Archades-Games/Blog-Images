@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Podcast","/p/podcast.html",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Releases","/p/upcoming-releases.html",false]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":"","prices":true,"intros":{"xbox":"Xbox reviews, guides and news, from the original console to Series X|S.","playstation":"PlayStation reviews, accessories and news, from the PS1 to the PS5.","nintendo":"Nintendo reviews, hardware and history, from the NES to the Switch 2.","pc":"PC gaming: handhelds, hardware and the games worth playing on them.","retro gaming":"Classic consoles and games, the hardware that keeps them running, and the stories behind them."},"introFilters":["Review","News","History"],"notfound":true};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Podcast","/p/podcast.html",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Releases","/p/upcoming-releases.html",false]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":"","prices":true,"intros":{"xbox":"Xbox reviews, guides and news, from the original console to Series X|S.","playstation":"PlayStation reviews, accessories and news, from the PS1 to the PS5.","nintendo":"Nintendo reviews, hardware and history, from the NES to the Switch 2.","pc":"PC gaming: handhelds, hardware and the games worth playing on them.","retro gaming":"Classic consoles and games, the hardware that keeps them running, and the stories behind them."},"introFilters":["Review","News","History"],"notfound":true,"dealsAlso":["Black Friday gaming deals","Cyber Monday gaming deals","Black Friday week gaming deals"],"sale":{"name":"Black Friday","from":"2026-11-19","to":"2026-12-02"}};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -44,7 +44,10 @@
   // home page: the newest deals post as a slim banner; the rest stay under the Deals label (and off the older pages)
   var olderPage = !item && /^\/search\/?$/.test(path) && /[?&]updated-max=/.test(location.search) && !/[?&]q=/.test(location.search);
   if ((home || olderPage) && CFG.deals) {
-    var isDeal = function (t) { return t && t.toLowerCase().indexOf(CFG.deals.toLowerCase()) === 0; };
+    var dealStarts = [CFG.deals].concat(CFG.dealsAlso || []).map(function (x) { return x.toLowerCase(); });
+    var isDeal = function (t) { t = (t || "").toLowerCase(); return dealStarts.some(function (x) { return t.indexOf(x) === 0; }); };
+    var ymd = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    var onSale = CFG.sale && ymd >= CFG.sale.from && ymd <= CFG.sale.to;
     var newest = null;
     var feat = $("#FeaturedPost1");
     var ft = feat && $(".post-title a, h3 a", feat);
@@ -56,8 +59,9 @@
     });
     if (newest && home) {
       var main = (feat && !feat.classList.contains("ag-hide") && feat.offsetParent) ? feat : ($("#Blog1") || $("main"));
-      var bar = el("a", {"class": "ag-deals", href: newest.u},
-        '<span class="ag-tag">DEALS</span><span><b>' + esc(newest.t) + "</b><br>This week's sales on games and gear</span>" +
+      var bar = el("a", {"class": "ag-deals" + (onSale ? " ag-sale" : ""), href: newest.u},
+        '<span class="ag-tag">' + (onSale ? esc(CFG.sale.name.toUpperCase()) : "DEALS") + "</span><span><b>" + esc(newest.t) + "</b><br>" +
+        (onSale ? esc(CFG.sale.name) + " sales on games and gear, updated through Cyber Monday" : "This week's sales on games and gear") + "</span>" +
         '<span class="ag-go">See the deals &rarr;</span>');
       main.parentNode.insertBefore(bar, main);
       var more = el("p", {"class": "ag-ui", style: "margin:-10px 0 20px;font-size:14px"},
