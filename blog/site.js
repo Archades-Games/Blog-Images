@@ -289,6 +289,62 @@
     side.insertBefore(about, side.firstChild);
   }
 
+  // a slim bar pinned to the top once you've scrolled past the header (the theme's own only shows when you scroll back
+  // up): logo, the menu and search on computers; logo, search and the menu button on phones
+  var hdr = $(".centered-top-container");
+  if (hdr && !$(".ag-pin")) {
+    var sicon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 9.5 16a6.5 6.5 0 0 0 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5Zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14Z"/></svg>';
+    var pin = el("div", {"class": "ag-pin ag-ui"},
+      '<div class="ag-pin-in"><a class="ag-pin-logo" href="' + location.origin + '/" aria-label="Archades Games home">Archades Games</a>' +
+      '<nav class="ag-pin-menu" aria-label="Site menu">' + CFG.menu.map(function (m) {
+        var url = m[1].charAt(0) === "/" ? location.origin + m[1] : m[1];
+        return '<a href="' + esc(url) + '"' + (m[2] ? ' target="_blank" rel="noopener"' : "") + ">" + esc(m[0]) + "</a>";
+      }).join("") + "</nav>" +
+      '<form class="ag-pin-search" action="' + location.origin + '/search" role="search"><input name="q" placeholder="Search" ' +
+      'aria-label="Search this blog" autocomplete="off"><button type="submit" aria-label="Search">' + sicon + "</button></form>" +
+      '<button class="ag-pin-ham" type="button" aria-label="Open the sidebar"><svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button></div>');
+    document.body.appendChild(pin);
+    var form = $(".ag-pin-search", pin), q = $("input", form);
+    form.addEventListener("submit", function (e) {
+      if (matchMedia("(max-width:999px)").matches && !form.classList.contains("open")) {   // phones: the icon opens the field
+        e.preventDefault();
+        form.classList.add("open");
+        pin.classList.add("searching");
+        q.focus();
+      } else if (!q.value.trim()) {
+        e.preventDefault();
+        form.classList.remove("open");
+        pin.classList.remove("searching");
+      }
+    });
+    q.addEventListener("blur", function () {
+      if (!q.value.trim()) setTimeout(function () { form.classList.remove("open"); pin.classList.remove("searching"); }, 150);
+    });
+    $(".ag-pin-ham", pin).addEventListener("click", function () {
+      var h = $(".hamburger-section .hamburger-menu") || $(".hamburger-section");
+      if (h) h.dispatchEvent(new MouseEvent("click", {bubbles: true}));
+    });
+    var limit = 0;
+    var measure = function () {
+      if (hdr.classList.contains("sticky")) return;           // (the theme's pinned copy isn't where the header is)
+      var r = hdr.getBoundingClientRect();
+      if (r.height) limit = r.bottom + scrollY;
+    };
+    var onScroll = function () {
+      var show = limit > 0 && scrollY > limit;
+      if (show !== pin.classList.contains("on")) {
+        pin.classList.toggle("on", show);
+        document.body.classList.toggle("ag-pinned", show);
+        if (!show) { form.classList.remove("open"); pin.classList.remove("searching"); }
+      }
+    };
+    measure(); onScroll();
+    addEventListener("scroll", onScroll, {passive: true});
+    addEventListener("resize", function () { measure(); onScroll(); });
+    addEventListener("load", function () { measure(); onScroll(); });
+  }
+
   // footer: who you are, the menu, the platforms, your channels, the policy pages and the affiliate notice
   var foot = $("footer.footer") || $("footer");
   if (foot && !$(".ag-footer")) {
