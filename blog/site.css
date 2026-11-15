@@ -192,6 +192,27 @@ html{overflow-x:clip;}
 .post-body blockquote{border-left:4px solid var(--ag-teal);margin-left:0;padding-left:1em;color:var(--ag-muted);}
 .post-body .ld-gear,.post-body .ld-related{background:var(--ag-surface);}
 .post-body .ld-gear{border-color:var(--ag-line)!important;}
+.ag-intro{background:var(--ag-surface);border:1px solid var(--ag-line);border-radius:14px;padding:16px 20px;margin:0 0 18px;}
+.ag-intro h1{margin:0 0 4px;font-family:var(--ag-head);font-size:1.6rem;color:var(--ag-text);}
+.ag-intro p{margin:0;color:var(--ag-muted);font-size:1rem;line-height:1.5;}
+.ag-intro-f{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.ag-intro-f a{padding:5px 13px;border-radius:999px;border:1px solid var(--ag-line);background:var(--ag-raised);font-family:var(--ag-head);
+  font-weight:600;font-size:14px;color:var(--ag-text)!important;text-decoration:none!important;}
+.ag-intro-f a:hover{border-color:var(--ag-aqua);color:var(--ag-aqua)!important;}
+.ag-404{background:var(--ag-surface);border:1px solid var(--ag-line);border-radius:14px;padding:22px 24px;margin:0 0 24px;}
+.ag-404 h1{margin:0 0 6px;font-family:var(--ag-head);font-size:1.7rem;color:var(--ag-text);}
+.ag-404 p{color:var(--ag-muted);margin:0 0 14px;}
+.ag-404 form{display:flex;gap:8px;margin:0 0 16px;max-width:520px;}
+.ag-404 input{flex:1;min-width:0;background:var(--ag-bg);border:1px solid var(--ag-line);border-radius:999px;padding:9px 16px;
+  color:var(--ag-text);font-family:var(--ag-head);font-size:15px;outline:none;}
+.ag-404 input:focus{border-color:var(--ag-aqua);}
+.ag-404 button{background:var(--ag-aqua);color:#071012;border:0;border-radius:999px;padding:9px 18px;font-family:var(--ag-head);
+  font-weight:700;cursor:pointer;}
+.ag-404 h3{font-family:var(--ag-head);margin:14px 0 6px;} .ag-404 ul{margin:0;padding-left:20px;} .ag-404 li{margin:0 0 5px;}
+.post-body .ld-proscons{background:var(--ag-surface);border-color:var(--ag-line)!important;}
+.post-body .ld-proscons ul{font-size:1rem;line-height:1.45;}
+.post-body .ld-pros li:first-child{color:var(--ag-aqua);} .post-body .ld-cons li:first-child{color:var(--ag-purple);}
+@media (max-width:640px){.post-body .ld-proscons ul{width:100%!important;margin:0 0 10px!important;}}
 .ld-gear .ag-price{margin-left:7px;font-weight:700;color:var(--ag-aqua);}
 .ld-gear .ag-price-note{margin:10px 0 0;font-size:12px;opacity:.7;}
 .ag-zoom{position:fixed;inset:0;background:rgba(5,6,8,.92);display:flex;align-items:center;justify-content:center;z-index:99999;cursor:zoom-out;}
