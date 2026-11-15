@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":"","prices":true};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":"","prices":true,"intros":{"xbox":"Xbox reviews, guides and news, from the original console to Series X|S.","playstation":"PlayStation reviews, accessories and news, from the PS1 to the PS5.","nintendo":"Nintendo reviews, hardware and history, from the NES to the Switch 2.","pc":"PC gaming: handhelds, hardware and the games worth playing on them.","retro gaming":"Classic consoles and games, the hardware that keeps them running, and the stories behind them."},"introFilters":["Review","News","History"],"notfound":true};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -178,6 +178,42 @@
         return '<a href="' + location.origin + "/search/label/" + encodeURIComponent(x[1]) + '"' + on + ">" + esc(x[0]) + "</a>";
       }).join(""));
     mainBox.insertBefore(row, mainBox.firstChild);
+  }
+
+  // a few words at the top of a platform page, with quick filters (that platform's reviews, news, history)
+  var introText = curLab && (CFG.intros || {})[curLab.toLowerCase()];
+  if (introText && mainBox && !$(".ag-intro")) {
+    var pname = (plats.filter(function (x) { return x[1].toLowerCase() === curLab.toLowerCase(); })[0] || [curLab])[0];
+    var filt = (CFG.introFilters || []).map(function (f) {
+      return '<a href="' + location.origin + "/search?q=" + encodeURIComponent('label:"' + curLab + '" label:"' + f + '"') + '">' +
+        esc(pname) + " " + esc(f.toLowerCase()) + (/s$/i.test(f) ? "" : (f.toLowerCase() === "history" ? "" : "s")) + "</a>";
+    }).join("");
+    var intro = el("div", {"class": "ag-intro ag-ui"}, "<h1>" + esc(pname) + "</h1><p>" + esc(introText) + "</p>" +
+      (filt ? '<div class="ag-intro-f">' + filt + "</div>" : ""));
+    var prow = $(".ag-plat", mainBox);
+    mainBox.insertBefore(intro, prow ? prow.nextSibling : mainBox.firstChild);
+  }
+
+  // page not found: search (with the words from the address), the platforms and the newest posts
+  var gone = document.body.classList.contains("error-view") && $(".status-msg-body");
+  if (CFG.notfound && gone && !$(".ag-404")) {
+    var slug = decodeURIComponent((location.pathname.split("/").pop() || "").replace(/\.html?$/i, "")).replace(/[-_+]+/g, " ").replace(/[^\w ]/g, "").trim();
+    var box404 = el("div", {"class": "ag-404 ag-ui"},
+      "<h1>That page isn't here</h1><p>It may have moved or been removed. Try a search, or pick up from one of these.</p>" +
+      '<form action="' + location.origin + '/search" role="search"><input name="q" value="' + esc(slug) + '" placeholder="Search the blog" aria-label="Search the blog">' +
+      "<button type=\"submit\">Search</button></form>" +
+      (plats.length ? '<nav class="ag-plat">' + plats.map(function (x) {
+        return '<a href="' + location.origin + "/search/label/" + encodeURIComponent(x[1]) + '">' + esc(x[0]) + "</a>"; }).join("") + "</nav>" : "") +
+      (CFG.start ? '<p><a class="ag-more" href="' + esc(CFG.start) + '">New here? Start here &rarr;</a></p>' : "") +
+      '<div class="ag-404-new"></div>');
+    gone.parentNode.replaceChild(box404, gone);
+    if (window.fetch) fetch(location.origin + "/feeds/posts/summary?alt=json&max-results=6").then(function (r) { return r.json(); }).then(function (j) {
+      var items = ((j.feed || {}).entry || []).map(function (e) {
+        var l = (e.link || []).filter(function (x) { return x.rel === "alternate"; })[0];
+        return l ? '<li><a href="' + esc(l.href) + '">' + esc((e.title || {}).$t || "") + "</a></li>" : "";
+      }).join("");
+      if (items) $(".ag-404-new", box404).innerHTML = "<h3>Newest posts</h3><ul>" + items + "</ul>";
+    }).catch(function () {});
   }
 
   if (body) {
