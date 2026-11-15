@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). Edit there, not here. */
 @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700&family=Source+Serif+4:wght@400;600&display=swap");
-:root{--ag-bg:#0E1013;--ag-surface:#161A1F;--ag-raised:#1D2229;--ag-line:#2A3038;--ag-text:#ECEAE6;--ag-muted:#A3ABB4;--ag-aqua:#3DB9C7;--ag-aqua-hi:#7AD9E3;--ag-teal:#2E8B85;--ag-red:#E5262C;--ag-purple:#8B6CF0;--ag-head:"Exo 2",system-ui,sans-serif;--ag-body:"Source Serif 4",Georgia,serif;--ag-max:1440px;}
+:root{--ag-bg:#0e1013;--ag-surface:#161a1f;--ag-raised:#1d2229;--ag-line:#2a3038;--ag-text:#eceae6;--ag-muted:#a3abb4;--ag-aqua:#3db9c7;--ag-aqua-hi:#7ad9e3;--ag-teal:#2e8b85;--ag-red:#e5262c;--ag-purple:#8b6cf0;--ag-head:"Exo 2",system-ui,sans-serif;--ag-body:"Source Serif 4",Georgia,serif;--ag-max:1440px;}
 
 /* page */
 body{background:var(--ag-bg)!important;color:var(--ag-text)!important;font-family:var(--ag-body)!important;}
