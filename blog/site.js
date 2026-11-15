@@ -1,6 +1,6 @@
 /* Archades Games: written by Link Desk (Blog look page). */
 (function () {
-  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":""};
+  var CFG = {"base":"https://archades-games.github.io/Blog-Images/blog","menu":[["Home","/",false],["Reviews","/search/label/Review",false],["History","/search/label/History",false],["Deals","/search/label/Deals",false],["Shop","https://creators.bestbuy.com/mypage/ArchadesGames",true],["Supporters","/p/supporters.html",false],["Discord","https://discord.gg/Sh89mzu",true]],"deals":"Gaming deals this week","dealsLabel":"Deals","subscribe":"https://www.youtube.com/@archadesgames?sub_confirmation=1","discord":"https://discord.gg/Sh89mzu","patreon":"https://www.patreon.com/icestrike256","videos":4,"youtube":"https://www.youtube.com/@archadesgames","twitch":"https://www.twitch.tv/icestrike256","facebook":"","tagline":"Gaming Past, Present and Future","about":"Reviews, gaming history and hardware deep dives, from retro classics to the newest consoles.","platforms":[["Xbox","Xbox"],["PlayStation","PlayStation"],["Nintendo","Nintendo"],["PC","PC"],["Retro","Retro Gaming"]],"footerLinks":[["Supporters","/p/supporters.html"],["Privacy Policy","/p/privacy-policy.html"],["Terms of Service","/p/terms-of-service.html"]],"footerNote":"This site contains affiliate links. As an Amazon Associate I earn from qualifying purchases. Other store links may also earn me a commission at no extra cost to you.","start":"","prices":true};
   function $(s, r) { return (r || document).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
   function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
@@ -382,6 +382,27 @@
       return '<a href="' + esc(r.u) + '">' + (r.i ? '<img loading="lazy" alt="" src="' + esc(r.i) + '">' : "<img alt=\"\">") + "<span>" + esc(r.t) + "</span></a>";
     }).join("") + "</div>";
   });
+
+  // current Amazon prices on the gear links in a post: read from Amazon's own API at most a day ago (older: not shown)
+  var gearBox = $(".post-body .ld-gear");
+  if (CFG.prices && gearBox && window.fetch) {
+    var alinks = $$("a[href*='amazon.']", gearBox).filter(function (a) { return /\/dp\/[A-Z0-9]{10}/.test(a.getAttribute("href") || ""); });
+    if (alinks.length) fetch(CFG.base + "/prices.json", {cache: "no-cache"}).then(function (r) { return r.json(); }).then(function (d) {
+      if (!d || !d.p || !d.t || Date.now() / 1000 - d.t > 86400) return;
+      var n = 0;
+      alinks.forEach(function (a) {
+        var m = /\/dp\/([A-Z0-9]{10})/.exec(a.getAttribute("href")), price = m && d.p[m[1]];
+        if (!price || $(".ag-price", a)) return;
+        a.appendChild(el("span", {"class": "ag-price"}, esc(price)));
+        n++;
+      });
+      if (n && !$(".ag-price-note", gearBox)) {
+        var when = new Date(d.t * 1000).toLocaleString([], {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+        gearBox.appendChild(el("p", {"class": "ag-price-note"}, "Amazon prices as of " + esc(when) +
+          ". Prices and availability can change; the price shown on Amazon when you buy is the one that applies."));
+      }
+    }).catch(function () {});
+  }
 
   // sidebar: your newest videos in place of the old (blank) embed
   var vw = $$(".widget.HTML").filter(function (w) { var h = $("h3.title, h2.title", w); return h && /latest youtube/i.test(h.textContent); });
