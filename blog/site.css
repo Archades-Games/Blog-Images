@@ -214,6 +214,10 @@ html{overflow-x:clip;}
 .ag-404 button{background:var(--ag-aqua);color:#071012;border:0;border-radius:999px;padding:9px 18px;font-family:var(--ag-head);
   font-weight:700;cursor:pointer;}
 .ag-404 h3{font-family:var(--ag-head);margin:14px 0 6px;} .ag-404 ul{margin:0;padding-left:20px;} .ag-404 li{margin:0 0 5px;}
+/* an article's share button: tucked under the byline, not floating in its own band of empty space */
+.item-view .post-share-buttons-top{margin:2px 0 0!important;} .item-view .post-share-buttons-top .post-share-buttons{margin:0!important;}
+.item-view .post-body > :first-child{margin-top:10px!important;}
+.post-body .bp-disclosure + .ld-disclosure{margin-top:-6px;}
 .post-body .ld-score{color:var(--ag-text);} .post-body .ld-score img{box-shadow:none!important;}
 .post-body .ld-scorechip a{color:var(--ag-text)!important;background:var(--ag-surface);} .post-body .ld-scorechip a:hover{border-color:var(--ag-aqua)!important;}
 @media (max-width:640px){.post-body .ld-score .ld-badge{flex:1 1 100%!important;}}
