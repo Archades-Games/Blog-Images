@@ -148,7 +148,8 @@ html{overflow-x:clip;}
    box there: a finger on it would stop the page from scrolling. */
 @media (max-width:999px){.sidebar-container{background:var(--ag-bg)!important;overflow-x:hidden!important;}
   body:not(.item-view) .sidebar-container{overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
-  body.item-view .sidebar-container{overflow:visible!important;overscroll-behavior:auto!important;}
+  body.item-view .sidebar-container{overflow:visible!important;overscroll-behavior:auto!important;clear:both!important;display:flow-root!important;}
+  /* (clear + flow-root: the post column is floated in an article; without them the sidebar slid up over the post) */
   .sidebar-container .section{overflow:visible!important;}}
 .sidebar-container .widget *{max-width:100%;box-sizing:border-box;}
 .sidebar-container img,.sidebar-container iframe,.sidebar-container ins,.sidebar-container video{max-width:100%!important;}
@@ -213,6 +214,9 @@ html{overflow-x:clip;}
 .ag-404 button{background:var(--ag-aqua);color:#071012;border:0;border-radius:999px;padding:9px 18px;font-family:var(--ag-head);
   font-weight:700;cursor:pointer;}
 .ag-404 h3{font-family:var(--ag-head);margin:14px 0 6px;} .ag-404 ul{margin:0;padding-left:20px;} .ag-404 li{margin:0 0 5px;}
+.post-body .ld-score{color:var(--ag-text);} .post-body .ld-score img{box-shadow:none!important;}
+.post-body .ld-scorechip a{color:var(--ag-text)!important;background:var(--ag-surface);} .post-body .ld-scorechip a:hover{border-color:var(--ag-aqua)!important;}
+@media (max-width:640px){.post-body .ld-score .ld-badge{flex:1 1 100%!important;}}
 .post-body .ld-proscons{background:var(--ag-surface);border-color:var(--ag-line)!important;}
 .post-body .ld-proscons ul{font-size:1rem;line-height:1.45;}
 .post-body .ld-pros li:first-child{color:var(--ag-aqua);} .post-body .ld-cons li:first-child{color:var(--ag-purple);}
